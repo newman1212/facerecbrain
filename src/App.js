@@ -75,7 +75,6 @@ class App extends Component {
     // .then(response =>this.displayFaceBox(this.calculateFaceLocation(response)))
     // .catch(err=>console.log(err));
     
-
   }
 
 
@@ -87,7 +86,7 @@ class App extends Component {
     const {isSignedIn, imageUrl, route, box} = this.state
   return (
       <div className="App">
-        {/*<ParticlesBg type="lines"  bg={true} />*/}
+        <ParticlesBg type="lines"  bg={true}/>
         <Navigation onRouteChange={this.onRouteChange} isSignedIn ={isSignedIn}/>
         {route==='home'?
         <div>
@@ -100,7 +99,6 @@ class App extends Component {
           <Signin onRouteChange={this.onRouteChange}/>
           :<Register onRouteChange={this.onRouteChange}/>
           )
-
       }
 
       </div>
