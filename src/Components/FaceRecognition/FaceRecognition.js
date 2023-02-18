@@ -1,23 +1,33 @@
 import React from 'react';
+import Boundbox from './Boundbox';
 
-const FaceRecognition = ({imageUrl,box}) => {
+const FaceRecognition = ({ imageUrl, box }) => {
+  return (
+    <div className='center ma'>
 
-	return (
-		<div className='center ma'>
-			<div className='absolute mt2' >
-				<img id='inputimage' src = {imageUrl} alt ='' width='500px' height='auto'/>
-			</div>
-			  <div className='bounding-box'
-			   style={{top: box.topRow, right: box.rightCol, bottom: box.bottomRow, left: box.leftCol}}>
-		
-			   </div>
-		
-		</div>
+      <div className='absolute mt2'>
+        <img id='inputimage' alt='' src={imageUrl} width='500' height='auto'/>
+      
+      {
+      box.map((face,i) => {
+      return <Boundbox 
+      key ={box[i].topRow} 
+      boxTop={box[i].topRow} 
+      boxDown={box[i].bottomRow} 
+      boxLeft={box[i].leftCol}
+      boxRight={box[i].rightCol}/>
+    })
 
+      }
 
-		);
+      </div>
+
+    </div>
+  );
 }
 
 export default FaceRecognition;
 
-// https://samples.clarifai.com/face-det.jpg
+
+
+
