@@ -158,7 +158,7 @@ displayInfo = (info) => {
    
 
     //api call will be made from the backend instead
-    fetch('http://localhost:3001/imageUrl', {
+    fetch('https://facerecapi.onrender.com/imageUrl', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -171,7 +171,7 @@ displayInfo = (info) => {
         console.log(Object.keys(response.outputs[0].data.regions).length)
         console.log(response);
         if (response) {
-                  fetch('http://localhost:3001/image', {
+                  fetch('https://facerecapi.onrender.com/image', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
