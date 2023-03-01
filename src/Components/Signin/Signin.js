@@ -35,6 +35,7 @@ onSubmitSignIn = () => {
     this.props.loadUser(user);
     this.props.onRouteChange('home');
   }
+  else {alert(user)};
     
   }    
   
