@@ -31,7 +31,7 @@ onSubmitSignIn = () => {
       password:this.state.signInPassword
     }),
   }).then(response=>response.json())
-  .then(user=>{if(user.id){
+  .then(user=>{if(user){
     this.props.loadUser(user);
     this.props.onRouteChange('home');
   }
