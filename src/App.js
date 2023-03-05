@@ -256,12 +256,15 @@ displayInfo = (info) => {
                 name={this.state.user.name}
                 entries={this.state.user.entries}
               />
-     
+        <div>
+              <Spinner radius={120} color= "white" stroke={5} visible={visible} />
+        </div>
+
+
               <ImageLinkForm
                 onInputChange={this.onInputChange}
                 onButtonSubmit={this.onButtonSubmit}
                 enterOption = {this.enterOption}
-                Spinner={spinner}
               />
       
               <FaceRecognition box={box} imageUrl={imageUrl} />
