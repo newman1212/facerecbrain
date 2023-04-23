@@ -8,7 +8,6 @@ import Signin from './Components/Signin/Signin';
 import FaceRecognition from './Components/FaceRecognition/FaceRecognition';
 import './App.css';
 import ParticlesBg from 'particles-bg';
-import Spinner from 'react-spinner-material';
 // import { BallBeat } from 'react-pure-loaders';
 // import './Particles.css';
 
@@ -171,7 +170,7 @@ displayInfo = (info) => {
         console.log(Object.keys(response.outputs[0].data.regions).length)
         console.log(response);
         if (response) {
-                  fetch('https://facerecapi.onrender.com/image', {
+                  fetch('http://localhost:3004/image', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -256,15 +255,13 @@ displayInfo = (info) => {
                 name={this.state.user.name}
                 entries={this.state.user.entries}
               />
-        <div>
-              <Spinner radius={120} color= "white" stroke={5} visible={visible} />
-        </div>
-
+       
 
               <ImageLinkForm
                 onInputChange={this.onInputChange}
                 onButtonSubmit={this.onButtonSubmit}
                 enterOption = {this.enterOption}
+                visible={visible}
               />
       
               <FaceRecognition box={box} imageUrl={imageUrl} />

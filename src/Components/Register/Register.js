@@ -1,4 +1,5 @@
 import React from 'react';
+import Spinner from 'react-spinner-material';
 
 
 
@@ -8,7 +9,8 @@ class Register extends React.Component {
     this.state = {
       email: '',
       password: '',
-      name: ''
+      name: '',
+      visible : false
     }
   }
 
@@ -27,7 +29,8 @@ class Register extends React.Component {
 
 
   onSubmitRegister = () => {
-    fetch('https://facerecapi.onrender.com/register', {
+       this.setState({visible:true});
+    fetch('https://facerecapi.onrender.com/register',{
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -40,11 +43,14 @@ class Register extends React.Component {
       .then(user=> { if (user.email && user.name){
         this.props.loadUser(user);
         this.props.onRouteChange('home');
+          this.setState({visible:false})
       }
       else{alert(user)}
+        this.setState({visible:false})
 
 
-      })  
+      })
+  
   }
 
    enterOption = (event) => {
@@ -58,7 +64,8 @@ class Register extends React.Component {
 
 
   render() {
-     const {onRouteChange} = this.props
+     const {onRouteChange} = this.props;
+     const {visible} = this.state
     return (
       <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
         <main className="pa4 black-80">
@@ -103,6 +110,10 @@ class Register extends React.Component {
                 type="submit"
                 value="Register"
               />
+              <div className = 'center'>
+                  <Spinner radius={30} color= "white" stroke={5} visible={visible}  />
+              </div>
+           
             </div>
             <div className="lh-copy mt3">
               <p onClick={()=>onRouteChange('signin')} className="f6 link white db pointer">Already have an account? Sign In</p>

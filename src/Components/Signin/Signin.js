@@ -1,4 +1,6 @@
 import React from 'react';
+import Spinner from 'react-spinner-material';
+
 
 
 
@@ -8,7 +10,8 @@ class Signin extends React.Component {
     super(props);
     this.state = {
       signInEmail : '',
-      signInPassword: ''
+      signInPassword: '',
+      visible:false
     }
 
   }
@@ -23,6 +26,7 @@ onPasswordChange = (event) => {
 }
 
 onSubmitSignIn = () => {
+    this.setState({visible:true});
   fetch('https://facerecapi.onrender.com/signin',{
     method:'post',
     headers: {'Content-Type':'application/json'},
@@ -31,11 +35,13 @@ onSubmitSignIn = () => {
       password:this.state.signInPassword
     }),
   }).then(response=>response.json())
-  .then(user=>{if(user.id){
+  .then(user=>{if(user){
     this.props.loadUser(user);
     this.props.onRouteChange('home');
+      this.setState({visible:false});
   }
   else {alert(user)};
+    this.setState({visible:false});
     
   }    
   
@@ -55,6 +61,7 @@ onSubmitSignIn = () => {
   render(){
 
     const {onRouteChange} = this.props
+      const {visible} = this.state
 
      return (
       <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
@@ -91,6 +98,11 @@ onSubmitSignIn = () => {
                 value="Sign in"
               />
             </div>
+
+                <div className = 'center'>
+                  <Spinner radius={30} color= "white" stroke={5} visible={visible}  />
+              </div>
+           
             <div className="lh-copy mt3">
               <p onClick={()=>onRouteChange('register')} className="f6 link dim black white db pointer">
               Don't have an account yet? Register</p>
