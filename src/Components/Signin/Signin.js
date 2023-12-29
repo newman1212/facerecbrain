@@ -34,18 +34,18 @@ onSubmitSignIn = () => {
       {email:this.state.signInEmail,
       password:this.state.signInPassword
     }),
-  }).then(response=>response.json())
-  .then(user=>{if(user){
-    this.props.loadUser(user);
-    this.props.onRouteChange('home');
-      this.setState({visible:false});
-  }
-  else {alert(user)};
-    this.setState({visible:false});
+  }).then(response=>response.json()).then(user=>console.log(user))
+  // .then(user=>{if(user){
+  //   this.props.loadUser(user);
+  //   this.props.onRouteChange('home');
+  //     this.setState({visible:false});
+  // }
+  // else {alert(user)};
+  //   this.setState({visible:false});
     
-  }    
+  // }    
   
-);
+// );
 }
 
 
