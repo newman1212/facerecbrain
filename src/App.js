@@ -170,7 +170,7 @@ displayInfo = (info) => {
         console.log(Object.keys(response.outputs[0].data.regions).length)
         console.log(response);
         if (response) {
-                  fetch('https://facerecapi.onrender.com/imageUrl', {
+                  fetch('https://facerecapi.onrender.com/image', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
