@@ -64,6 +64,10 @@ onSubmitSignIn = () => {
       const {visible} = this.state
 
      return (
+      <>
+      <p className="f2 green pa3 fw6">Hi there, for a quick demo you might want to use the following login details:</p>
+      <span className="f3 green  pa3 fw6" >Email : guest@gmail.com</span> <br/>
+       <span className="f3 green  pa3 fw6" >Password : guest123</span>
       <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
         <main className="pa4 black-80">
           <div className="measure" onKeyDown = {this.enterOption}>
@@ -110,6 +114,7 @@ onSubmitSignIn = () => {
           </div>
         </main>
       </article>
+      </>
     );
 
   }

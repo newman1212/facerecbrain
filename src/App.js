@@ -268,7 +268,9 @@ displayInfo = (info) => {
             </div>
           : (
              route === 'signin'
-             ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+             ?
+               <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+            
              : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
             )
         }
