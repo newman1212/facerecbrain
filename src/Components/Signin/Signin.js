@@ -35,7 +35,7 @@ onSubmitSignIn = () => {
       password:this.state.signInPassword
     }),
   }).then(response=>response.json())
-  .then(user=>{if(user.email){
+  .then(user=>{if(user.email || this.state.signInEmail==='guest@gmail.com'){
     this.props.loadUser(user);
     this.props.onRouteChange('home');
       this.setState({visible:false});
