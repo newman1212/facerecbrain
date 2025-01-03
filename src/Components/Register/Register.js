@@ -1,7 +1,6 @@
 import React from 'react';
 import Spinner from 'react-spinner-material';
-
-
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 
 class Register extends React.Component {
   constructor(props) {
@@ -10,122 +9,136 @@ class Register extends React.Component {
       email: '',
       password: '',
       name: '',
-      visible : false
-    }
+      visible: false,
+      showPassword: false,
+    };
   }
 
   onNameChange = (event) => {
-    this.setState({name: event.target.value})
-  }
+    this.setState({ name: event.target.value });
+  };
 
   onEmailChange = (event) => {
-    this.setState({email: event.target.value})
-  }
+    this.setState({ email: event.target.value });
+  };
 
   onPasswordChange = (event) => {
-    this.setState({password: event.target.value})
-  }
+    this.setState({ password: event.target.value });
+  };
 
-
+  togglePasswordVisibility = () => {
+    this.setState((prevState) => ({ showPassword: !prevState.showPassword }));
+  };
 
   onSubmitRegister = () => {
-       this.setState({visible:true});
-    fetch('https://facerecapi.onrender.com/register',{
+    this.setState({ visible: true });
+    fetch('https://facerecapi.onrender.com/register', {
       method: 'post',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: this.state.email,
         password: this.state.password,
-        name: this.state.name
-      })
+        name: this.state.name,
+      }),
     })
-      .then(response => response.json())
-      .then(user=> { if (user.email && user.name){
-        this.props.loadUser(user);
-        this.props.onRouteChange('home');
-          this.setState({visible:false})
-      }
-      else{alert(user)}
-        this.setState({visible:false})
+      .then((response) => response.json())
+      .then((user) => {
+        if (user.email && user.name) {
+          this.props.loadUser(user);
+          this.props.onRouteChange('home');
+          this.setState({ visible: false });
+        } else {
+          alert(user);
+          this.setState({ visible: false });
+        }
+      });
+  };
 
-
-      })
-  
-  }
-
-   enterOption = (event) => {
-    if(event.key === 'Enter'){
-      console.log('user pressed enter');
+  enterOption = (event) => {
+    if (event.key === 'Enter') {
       this.onSubmitRegister();
-
-    };
-    
-  }
-
+    }
+  };
 
   render() {
-     const {onRouteChange} = this.props;
-     const {visible} = this.state
+    const { onRouteChange } = this.props;
+    const { visible, password, showPassword } = this.state;
+
     return (
-      <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
-        <main className="pa4 black-80">
-          <div className="measure" onKeyDown = {this.enterOption}>
-            <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-              <legend className="f1 fw6 ph0 mh0 light-blue ">Register</legend>
-              <div className="mt3">
-                <label className="db fw6 lh-copy f6 light-blue" htmlFor="name">Name</label>
+      <article className="rounded-lg border border-gray-700 shadow-lg p-8 w-full max-w-md mx-auto mt-10 bg-gray-900/50">
+        <main className="text-gray-200" onKeyDown={this.enterOption}>
+          <div>
+            <fieldset className="mb-4">
+              <legend className="text-2xl font-semibold text-blue-400 mb-4">Register</legend>
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-1" htmlFor="name">
+                  Name
+                </label>
                 <input
-                  className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
+                  className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded focus:ring-blue-500 focus:border-blue-500"
                   type="text"
                   name="name"
                   id="name"
                   onChange={this.onNameChange}
                 />
               </div>
-              <div className="mt3">
-                <label className="db fw6 lh-copy f6 light-blue" htmlFor="email-address">Email</label>
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-1" htmlFor="email-address">
+                  Email
+                </label>
                 <input
-                  className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
+                  className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded focus:ring-blue-500 focus:border-blue-500"
                   type="email"
                   name="email-address"
                   id="email-address"
                   onChange={this.onEmailChange}
                 />
               </div>
-              <div className="mv3">
-                <label className="db fw6 lh-copy  light-blue f6" htmlFor="password">Password</label>
+              <div className="relative mb-4">
+                <label className="block text-sm font-medium mb-1" htmlFor="password">
+                  Password
+                </label>
                 <input
-                  className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
-                  type="password"
+                  className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded focus:ring-blue-500 focus:border-blue-500"
+                  type={showPassword ? 'text' : 'password'}
                   name="password"
                   id="password"
                   onChange={this.onPasswordChange}
                 />
+                {password && (
+                  <div
+                    className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-gray-400"
+                    onClick={this.togglePasswordVisibility}
+                  >
+                    {showPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
+                  </div>
+                )}
               </div>
             </fieldset>
-            <div className="" >
-              <input
+            <div>
+              <button
                 onClick={this.onSubmitRegister}
-                className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib light-blue"
-                type="submit"
-                value="Register"
-              />
-              <div className = 'center'>
-                  <Spinner radius={30} color= "white" stroke={5} visible={visible}  />
+                className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              >
+                Register
+              </button>
+              <div className="flex justify-center mt-4">
+                <Spinner radius={30} color="white" stroke={5} visible={visible} />
               </div>
-           
             </div>
-            <div className="lh-copy mt3">
-              <p onClick={()=>onRouteChange('signin')} className="f6 link white db pointer">Already have an account? Sign In</p>
+            <div className="mt-4 text-center">
+              <p
+                onClick={() => onRouteChange('signin')}
+                className="text-blue-400 hover:underline cursor-pointer"
+              >
+                Already have an account? Sign In
+              </p>
             </div>
-            </div>
+          </div>
         </main>
       </article>
     );
   }
-
 }
-
-
 
 export default Register;

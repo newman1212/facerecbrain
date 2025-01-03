@@ -1,124 +1,138 @@
 import React from 'react';
 import Spinner from 'react-spinner-material';
-
-
-
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 
 class Signin extends React.Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      signInEmail : '',
+      signInEmail: '',
       signInPassword: '',
-      visible:false
-    }
-
-  }
-
-onEmailChange = (event) => {
-  this.setState({signInEmail : event.target.value})
-}
-
-
-onPasswordChange = (event) => {
-  this.setState({signInPassword : event.target.value})
-}
-
-onSubmitSignIn = () => {
-    this.setState({visible:true});
-  fetch('https://facerecapi.onrender.com/signin',{
-    method:'post',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify(
-      {email:this.state.signInEmail,
-      password:this.state.signInPassword
-    }),
-  }).then(response=>response.json())
-  .then(user=>{if(user.email || this.state.signInEmail==='guest@gmail.com'){
-    this.props.loadUser(user);
-    this.props.onRouteChange('home');
-      this.setState({visible:false});
-  }
-  else {alert('hmmm something went wrong, check your login details')};
-    this.setState({visible:false});
-    
-  }    
-  
-);
-}
-
-
- enterOption = (event) => {
-    if(event.key === 'Enter'){
-      console.log('user pressed enter');
-      this.onSubmitSignIn();
-
+      visible: false,
+      showPassword: false, // State to toggle password visibility
     };
-    
   }
 
-  render(){
+  onEmailChange = (event) => {
+    this.setState({ signInEmail: event.target.value });
+  };
 
-    const {onRouteChange} = this.props
-      const {visible} = this.state
+  onPasswordChange = (event) => {
+    this.setState({ signInPassword: event.target.value });
+  };
 
-     return (
+
+  togglePasswordVisibility = () => {
+    this.setState((prevState) => ({
+      showPassword: !prevState.showPassword,
+    }));
+  };
+
+  onSubmitSignIn = () => {
+    this.setState({ visible: true });
+    fetch('https://facerecapi.onrender.com/signin', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: this.state.signInEmail,
+        password: this.state.signInPassword,
+      }),
+    })
+      .then((response) => response.json())
+      .then((user) => {
+        if (user.email || this.state.signInEmail === 'guest@gmail.com') {
+          this.props.loadUser(user);
+          this.props.onRouteChange('home');
+          this.setState({ visible: false });
+        } else {
+          alert('Hmmm, something went wrong. Check your login details.');
+          this.setState({ visible: false });
+        }
+      });
+  };
+
+  enterOption = (event) => {
+    if (event.key === 'Enter') {
+      this.onSubmitSignIn();
+    }
+  };
+
+  render() {
+    const { onRouteChange } = this.props;
+    const { visible, showPassword, signInPassword} = this.state;
+
+    return (
       <>
-      <p className="f2 green pa3 fw6">Hi there, for a quick demo you might want to use the following login details:</p>
-      <span className="f3 green  pa3 fw6" >Email : guest@gmail.com</span> <br/>
-       <span className="f3 green  pa3 fw6" >Password : guest123</span>
-      <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
-        <main className="pa4 black-80">
-          <div className="measure" onKeyDown = {this.enterOption}>
-            <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-              <legend className="f1 fw6 ph0 light-blue  mh0">Sign In</legend>
-              <div className="mt3">
-                <label className="db fw6 lh-copy light-blue f6" htmlFor="email-address">Email</label>
-                <input
-                  className="pa2 input-reset ba bg-transparent  hover-bg-black hover-white w-100"
-                  type="email"
-                  name="email-address"
-                  id="email-address"
-                  onChange={this.onEmailChange}
-                />
+        <p className="text-lg text-green-500 text-center mb-4">
+          Hi there! For a quick demo, use the following login details:
+        </p>
+        <div className="text-center text-green-400">
+          <p>Email: guest@gmail.com</p>
+          <p>Password: guest123</p>
+        </div>
+        <article className="rounded-lg border border-gray-700 shadow-lg p-8 w-full max-w-md mx-auto mt-10 bg-gray-900/50">
+          <main className="text-gray-200" onKeyDown={this.enterOption}>
+            <div>
+              <fieldset className="mb-4">
+                <legend className="text-2xl font-semibold text-blue-400 mb-4">Sign In</legend>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1" htmlFor="email-address">
+                    Email
+                  </label>
+                  <input
+                    className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded focus:ring-blue-500 focus:border-blue-500"
+                    type="email"
+                    name="email-address"
+                    id="email-address"
+                    onChange={this.onEmailChange}
+                  />
+                </div>
+                <div className="mb-4 relative">
+                  <label className="block text-sm font-medium mb-1" htmlFor="password">
+                    Password
+                  </label>
+                  <input
+                    className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded focus:ring-blue-500 focus:border-blue-500"
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    id="password"
+                    onChange={this.onPasswordChange}
+                  />
+                   {signInPassword && (
+                    <div
+                      className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-gray-400"
+                      onClick={this.togglePasswordVisibility}
+                    >
+                      {showPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
+                    </div>
+                   )}
+                </div>
+              </fieldset>
+              <div>
+                <button
+                  onClick={this.onSubmitSignIn}
+                  className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                >
+                  Sign In
+                </button>
               </div>
-              <div className="mv3">
-                <label className="db fw6 lh-copy light-blue f6" htmlFor="password">Password</label>
-                <input
-                  className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
-                  type="password"
-                  name="password"
-                  id="password"
-                  onChange={this.onPasswordChange}
-                />
+              <div className="flex justify-center mt-4">
+                <Spinner radius={30} color="white" stroke={5} visible={visible} />
               </div>
-            </fieldset>
-            <div className="">
-              <input
-                onClick={this.onSubmitSignIn}
-                className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer light-blue f6 dib"
-                type="submit"
-                value="Sign in"
-              />
+              <div className="mt-4 text-center">
+                <p
+                  onClick={() => onRouteChange('register')}
+                  className="text-blue-400 hover:underline cursor-pointer"
+                >
+                  Don't have an account yet? Register
+                </p>
+              </div>
             </div>
-
-                <div className = 'center'>
-                  <Spinner radius={30} color= "white" stroke={5} visible={visible}  />
-              </div>
-           
-            <div className="lh-copy mt3">
-              <p onClick={()=>onRouteChange('register')} className="f6 link dim black white db pointer">
-              Don't have an account yet? Register</p>
-            </div>
-          </div>
-        </main>
-      </article>
+          </main>
+        </article>
       </>
     );
-
   }
 }
-
 
 export default Signin;
