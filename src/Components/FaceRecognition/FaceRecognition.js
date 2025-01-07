@@ -1,12 +1,12 @@
 import React from 'react';
 import Boundbox from './Boundbox';
 
-const FaceRecognition = ({ imageUrl, box }) => {
+const FaceRecognition = ({ imageUrl, box, fileUrl, uploadedImageUrl }) => {
   return (
     <div className='center ma'>
 
       <div className='absolute mt2'>
-        <img id='inputimage' alt='' src={imageUrl} width='500' height='auto'/>
+        <img id='inputimage' alt='' src={uploadedImageUrl} width='500' height='auto'/>
       
       {
       box.map((face,i) => {

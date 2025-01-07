@@ -107,7 +107,7 @@ class Register extends React.Component {
                 />
                 {password && (
                   <div
-                    className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-gray-400"
+                    className="absolute top-1/2 right-3 transform -translate-y-1/6 cursor-pointer text-gray-400"
                     onClick={this.togglePasswordVisibility}
                   >
                     {showPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}

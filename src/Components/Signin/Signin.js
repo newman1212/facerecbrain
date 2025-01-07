@@ -21,7 +21,6 @@ class Signin extends React.Component {
     this.setState({ signInPassword: event.target.value });
   };
 
-
   togglePasswordVisibility = () => {
     this.setState((prevState) => ({
       showPassword: !prevState.showPassword,
@@ -29,26 +28,30 @@ class Signin extends React.Component {
   };
 
   onSubmitSignIn = () => {
-    this.setState({ visible: true });
-    fetch('https://facerecapi.onrender.com/signin', {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: this.state.signInEmail,
-        password: this.state.signInPassword,
-      }),
-    })
-      .then((response) => response.json())
-      .then((user) => {
-        if (user.email || this.state.signInEmail === 'guest@gmail.com') {
-          this.props.loadUser(user);
-          this.props.onRouteChange('home');
-          this.setState({ visible: false });
-        } else {
-          alert('Hmmm, something went wrong. Check your login details.');
-          this.setState({ visible: false });
-        }
-      });
+    // this.setState({ visible: true });
+    // fetch('https://facerecapi.onrender.com/signin', {
+    //   method: 'post',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({
+    //     email: this.state.signInEmail,
+    //     password: this.state.signInPassword,
+    //   }),
+    // })
+    //   .then((response) => response.json())
+    //   .then((user) => {
+    //     if (user.email || this.state.signInEmail === 'guest@gmail.com') {
+    //       this.props.loadUser(user);
+    //       this.props.onRouteChange('home');
+    //       this.setState({ visible: false });
+    //     } else {
+    //       alert('Hmmm, something went wrong. Check your login details.');
+    //       this.setState({ visible: false });
+    //     }
+    //   });
+
+    // this.props.loadUser(user);
+    this.props.onRouteChange('home');
+    this.setState({ visible: false });
   };
 
   enterOption = (event) => {
@@ -59,7 +62,7 @@ class Signin extends React.Component {
 
   render() {
     const { onRouteChange } = this.props;
-    const { visible, showPassword, signInPassword} = this.state;
+    const { visible, showPassword, signInPassword } = this.state;
 
     return (
       <>
@@ -92,20 +95,20 @@ class Signin extends React.Component {
                     Password
                   </label>
                   <input
-                    className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 pr-10 bg-gray-900 border border-gray-700 rounded focus:ring-blue-500 focus:border-blue-500"
                     type={showPassword ? 'text' : 'password'}
                     name="password"
                     id="password"
                     onChange={this.onPasswordChange}
                   />
-                   {signInPassword && (
+                  {signInPassword && (
                     <div
-                      className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-gray-400"
+                      className="absolute top-1/2 right-3 transform -translate-y-1/6 cursor-pointer text-gray-400"
                       onClick={this.togglePasswordVisibility}
                     >
                       {showPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
                     </div>
-                   )}
+                  )}
                 </div>
               </fieldset>
               <div>
