@@ -11,7 +11,7 @@ const VantaBackground = () => {
       THREE, // Pass the THREE instance
       color: 0xc0355d, // Customize colors
       backgroundColor: 0x211b21,
-      points: 10.0,
+      points: 15.0,
       maxDistance: 20.0,
     });
 

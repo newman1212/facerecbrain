@@ -30,25 +30,40 @@ class Register extends React.Component {
     this.setState((prevState) => ({ showPassword: !prevState.showPassword }));
   };
 
+  onSubmitRegisterControl =()=>{
+    const {name,email,password}=this.state;
+      if(!name || !email || !password){this.props.handleError('please complete form')}
+      else{this.onSubmitRegister()};
+
+  }
+
   onSubmitRegister = () => {
     this.setState({ visible: true });
-    fetch('https://facerecapi.onrender.com/register', {
+    fetch(
+
+      // 'http://localhost:5000/register',
+      
+      'https://facerecapi.onrender.com/register', 
+    {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: this.state.email,
         password: this.state.password,
         name: this.state.name,
+        entries: 0,
       }),
     })
       .then((response) => response.json())
       .then((user) => {
         if (user.email && user.name) {
           this.props.loadUser(user);
+          console.log(user,'USER INFO');
           this.props.onRouteChange('home');
           this.setState({ visible: false });
+          this.props.handleSuccess('Account Created Successfully!');
         } else {
-          alert(user);
+          this.props.handleError('Error creating account...pls try again later');
           this.setState({ visible: false });
         }
       });
@@ -56,7 +71,7 @@ class Register extends React.Component {
 
   enterOption = (event) => {
     if (event.key === 'Enter') {
-      this.onSubmitRegister();
+      this.onSubmitRegisterControl();
     }
   };
 
@@ -117,10 +132,10 @@ class Register extends React.Component {
             </fieldset>
             <div>
               <button
-                onClick={this.onSubmitRegister}
+                onClick={this.onSubmitRegisterControl}
                 className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none"
               >
-                Register
+                <span className="text-white text-lg font-bold font-mono"> Register</span>
               </button>
               <div className="flex justify-center mt-4">
                 <Spinner radius={30} color="white" stroke={5} visible={visible} />

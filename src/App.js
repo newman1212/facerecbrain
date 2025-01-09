@@ -21,7 +21,7 @@ const initialState = {
   faceCount: '',
   route: 'signin',
   isSignedIn: false,
-  visible: false,
+  // visible: false,
   user: {
     id: '',
     name: '',
@@ -33,7 +33,9 @@ const initialState = {
   uploadedImageUrl: '',
   isUploading: false,
   apiResponse: null,
-  FileName : 'Click To Upload Image'
+  FileName : 'Click To Upload Image',
+  loading: false,
+  progress: 0
 
 };
 
@@ -65,13 +67,58 @@ class App extends Component {
     );  
   };
 
+
+  handleDetectionProgress = async () => {
+    this.setState({ loading: true, progress: 0 });
+  
+    // Simulate progress increment
+    const progressInterval = setInterval(() => {
+      this.setState((prevState) => ({
+        progress: prevState.progress < 99 ? prevState.progress + 1 : prevState.progress,
+      }));
+    }, 180); // Adjust interval time for smoother progress
+  
+    try {
+      await this.handleFileUpload(); // Trigger the file upload
+      // await this.onButtonSubmit(this.state.uploadedImageUrl); // Trigger face detection
+  
+      clearInterval(progressInterval); // Stop progress increment on completion
+      this.setState({ progress: 'Done' }); // Set to 100% on completion
+    } catch (error) {
+      console.error("Error detecting faces:", error);
+      clearInterval(progressInterval); // Ensure interval is cleared on error
+    } finally {
+      // Reset progress and loading state
+      setTimeout(() => {
+        this.setState({ loading: false, progress: 0 });
+      }, 1000); // Optional delay for a smoother transition
+    }
+  };
+  
+
+
   handleSuccess = (message) => {
     console.log('alert triggered');
     toast.success(message, {
       position: "top-right",
-      autoClose: 3000,
+      autoClose: 5000,
     });
   };
+
+  handleDetectionSuccess = (message) => {
+    console.log("alert triggered");
+    toast.success(
+      <div>
+        <strong className="block text-lg">Success!</strong>
+        <span>{message}</span>
+      </div>,
+      {
+        position: "top-right",
+        autoClose: 15000,
+      }
+    );
+  };
+
 
   handleError = (message) => {
     console.log('alert triggered');
@@ -87,16 +134,17 @@ class App extends Component {
 
     if (!this.state.file) {this.handleError('No Image Uploaded')};
 
-    if (!this.state.faceCount && this.state.file){this.handleFileUpload()};
+    if (!this.state.faceCount && this.state.file){this.handleDetectionProgress()};
 
      
     if(this.state.faceCount>1)
-   { this.handleSuccess('Image already submitted. ' + this.state.faceCount + ' Faces Detected!');
+   { this.handleSuccess('Image already submitted. ' + this.state.faceCount + ' faces detected');
         this.scrollToSection();
        }
   
         else if(this.state.faceCount===1)
-          { this.handleSuccess('Image already submitted. A face has been Detected');
+          { this.handleSuccess('Image already submitted. A face has been detected');
+            
 
             this.scrollToSection();
           }
@@ -107,56 +155,53 @@ class App extends Component {
 
     }
   
-
-  handleFileUpload = async () => {
-
-    console.log('UPLOAD TRIGGERED');
-    this.setState({visible: true});
-    try {
-      // Fetch authentication parameters from the backend
-      const response = await fetch("https://facerecapi.onrender.com/imagekit-auth");
-      const { token, signature, expire } = await response.json();
-
-      console.log(token,signature,expire, 'PARAMETERS');
-
-     
-      // Upload the file
-      this.imagekit.upload(
-        {
-          file: this.state.file,
-          fileName: this.state.file.name,
-          token,
-          signature,
-          expire,
-        },
-        (err, result) => {
-          if (err) {
-            console.error("Upload Error: ", err);
-          } else {
-            console.log("Upload Successful: ", result);
-
-
-            // this.setState({ uploadedImageUrl : result.url });
-            // console.log(this.state.uploadedImageUrl, 'ImageURL')
-            this.setState(
-              { uploadedImageUrl: result.url },
-              () => {
-                console.log(this.state.uploadedImageUrl, 'ImageURL');
-                this.onButtonSubmit(this.state.uploadedImageUrl);
+    handleFileUpload = async () => {
+      console.log("UPLOAD TRIGGERED");
+      try {
+        // Fetch authentication parameters from the backend
+        const response = await fetch("https://facerecapi.onrender.com/imagekit-auth");
+        const { token, signature, expire } = await response.json();
+    
+        console.log(token, signature, expire, "PARAMETERS");
+    
+        // Wrap the ImageKit upload in a Promise
+        const result = await new Promise((resolve, reject) => {
+          this.imagekit.upload(
+            {
+              file: this.state.file,
+              fileName: this.state.file.name,
+              token,
+              signature,
+              expire,
+            },
+            (err, result) => {
+              if (err) {
+                reject(err); // Reject the promise if there's an error
+              } else {
+                resolve(result); // Resolve the promise with the result
               }
-            );
-            
-
-
-
-            // this.onButtonSubmit();
+            }
+          );
+        });
+    
+        console.log("Upload Successful: ", result);
+    
+        // Update the state with the uploaded image URL
+        this.setState(
+          { uploadedImageUrl: result.url },
+          async() => {
+            await this.onButtonSubmit(result.url);
           }
-        }
-      );
-    } catch (error) {
-      console.error("Error fetching authentication parameters: ", error);
-    }
-  };
+        );
+    
+      } catch (error) {
+        console.error("Error during file upload: ", error);
+        this.setState({ visible: false }, () => {
+          this.handleError("Oops! Something went wrong...please try again later");
+        });
+      }
+    };
+    
 
 
  
@@ -235,11 +280,11 @@ enterOption = (event) => {
     this.setState({faceCount:info},
       ()=> {
       if (info > 1) {
-      this.handleSuccess(`${info} Faces have been found in your image`);
+      this.handleDetectionSuccess(`${info} faces detected in your image`);
     } else if (info === 1) {
-      this.handleSuccess('A face has been found in your image');
+      this.handleDetectionSuccess('A face has been detected in your image');
     } else {
-      this.handleSuccess('No faces found in your image');
+      this.handle.Error('No faces found in your image');
     }
       }
     );
@@ -256,49 +301,45 @@ enterOption = (event) => {
     this.setState({ input: event.target.value });
   };
 
-  onButtonSubmit = (url) => {
-
-   
-
-      console.log('onButtonSubmit TRIGGERED!');
-
-    
-    //api call will be made from the backend instead
-    fetch('https://facerecapi.onrender.com/imageUrl', {
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              input: url,
-            })
-          })
-    .then(response=>response.json())
-    .then(console.log()) //after a fetch remember to do a response.json()
-      .then(response => {
-        console.log(Object.keys(response.outputs[0].data.regions).length)
-        console.log(response);
-        if (response) {
-      
-                  fetch('https://facerecapi.onrender.com/image', {
-            method: 'put',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              id: this.state.user.id
-            })
-          })
-            .then(res => res.json())
-            .then(count => {
-              this.setState(Object.assign(this.state.user, { entries: count}))
-            });
-          this.displayFaceBox(this.calculateFaceLocation(response))
-          this.displayInfo(Object.keys(response.outputs[0].data.regions).length)
-          
-         
-        }
-          else{alert('no response')};
-      })
-      .catch(err => console.log(err));
-
+  onButtonSubmit = async (url) => {
+    try {
+      console.log('onButtonSubmit TRIGGERED with image url:',url);
+  
+      // Make API call to the backend
+      const response = await fetch('https://facerecapi.onrender.com/imageUrl', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input: url }),
+      });
+  
+      const data = await response.json(); // Await response.json() for parsed data
+  
+      console.log(Object.keys(data.outputs[0].data.regions).length);
+      console.log(data);
+  
+      if (data) {
+        this.displayFaceBox(this.calculateFaceLocation(data));
+        this.displayInfo(Object.keys(data.outputs[0].data.regions).length);
+  
+        // Update user entry count
+        const updateResponse = await fetch('https://facerecapi.onrender.com/image', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: this.state.user.id }),
+        });
+  
+        const count = await updateResponse.json();
+        this.setState(Object.assign(this.state.user, { entries: count }));
+        console.log(count, 'COUNT');
+      } else {
+        alert('No response');
+      }
+    } catch (err) {
+      this.handleError('No face Detected...pls try another image');
+      console.error(err);
     }
+  };
+  
 
  
 
@@ -317,7 +358,8 @@ enterOption = (event) => {
   };
 
   render() {
-    const { isSignedIn, imageUrl, route, box, visible, fileUrl,uploadedImageUrl,FileName } = this.state;
+    const { isSignedIn, imageUrl, route, box, fileUrl,
+      uploadedImageUrl,FileName,loading,progress } = this.state;
     return (
       <div className="App">
         {/* Vanta Background */}
@@ -340,9 +382,11 @@ enterOption = (event) => {
                   <ImageLinkForm
                     handleFileChange ={this.handleFileChange}
                     imageSubmitControl={this.imageSubmitControl}
+                    progress={progress}
+                    loading={loading}
             
                     enterOption={this.enterOption}
-                    visible={visible}
+                    // visible={visible}
                     FileName = {FileName}
                   />
                   <FaceRecognition box={box} imageUrl={imageUrl} 
@@ -351,9 +395,15 @@ enterOption = (event) => {
             </div>
           ) : (
             route === 'signin' ? (
-              <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
+              <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} 
+                      handleSuccess={this.handleSuccess}
+                      handleError={this.handleError}
+              />
             ) : (
-              <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
+              <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}
+                  handleSuccess={this.handleSuccess}
+                  handleError={this.handleError}
+              />
             )
           )}
         </div>

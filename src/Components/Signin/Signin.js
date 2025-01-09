@@ -27,36 +27,48 @@ class Signin extends React.Component {
     }));
   };
 
-  onSubmitSignIn = () => {
-    // this.setState({ visible: true });
-    // fetch('https://facerecapi.onrender.com/signin', {
-    //   method: 'post',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({
-    //     email: this.state.signInEmail,
-    //     password: this.state.signInPassword,
-    //   }),
-    // })
-    //   .then((response) => response.json())
-    //   .then((user) => {
-    //     if (user.email || this.state.signInEmail === 'guest@gmail.com') {
-    //       this.props.loadUser(user);
-    //       this.props.onRouteChange('home');
-    //       this.setState({ visible: false });
-    //     } else {
-    //       alert('Hmmm, something went wrong. Check your login details.');
-    //       this.setState({ visible: false });
-    //     }
-    //   });
+  onSubmitSignInControl=()=>{
+    if(!this.state.signInEmail || !this.state.signInPassword){this.props.handleError('Please complete form')}
+    else{this.onSubmitSignIn()};
+  }
 
-    // this.props.loadUser(user);
-    this.props.onRouteChange('home');
-    this.setState({ visible: false });
+  onSubmitSignIn = () => {
+    this.setState({ visible: true });
+    
+    fetch(
+      // 'http://localhost:5000/signin'
+      'https://facerecapi.onrender.com/signin'
+      , 
+    {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: this.state.signInEmail,
+        password: this.state.signInPassword,
+      }),
+    })
+      .then((response) => response.json())
+      .then((user) => {
+        if (user.name) {
+          this.props.loadUser(user);
+          console.log(user,'USER INFO')
+          this.props.onRouteChange('home');
+          this.props.handleSuccess('Welcome Back...')
+          this.setState({ visible: false });
+        } else {
+          this.props.handleError('Wrong email or password')
+          this.setState({ visible: false });
+        }
+      });
+
+    
+    // this.props.onRouteChange('home');
+    // this.setState({ visible: false });
   };
 
   enterOption = (event) => {
     if (event.key === 'Enter') {
-      this.onSubmitSignIn();
+      this.onSubmitSignInControl();
     }
   };
 
@@ -66,13 +78,6 @@ class Signin extends React.Component {
 
     return (
       <>
-        <p className="text-lg text-green-500 text-center mb-4">
-          Hi there! For a quick demo, use the following login details:
-        </p>
-        <div className="text-center text-green-400">
-          <p>Email: guest@gmail.com</p>
-          <p>Password: guest123</p>
-        </div>
         <article className="rounded-lg border border-gray-700 shadow-lg p-8 w-full max-w-md mx-auto mt-10 bg-gray-900/50">
           <main className="text-gray-200" onKeyDown={this.enterOption}>
             <div>
@@ -113,10 +118,10 @@ class Signin extends React.Component {
               </fieldset>
               <div>
                 <button
-                  onClick={this.onSubmitSignIn}
+                  onClick={this.onSubmitSignInControl}
                   className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none"
                 >
-                  Sign In
+                 <span className="text-white text-lg font-bold font-mono"> Sign In</span>
                 </button>
               </div>
               <div className="flex justify-center mt-4">
