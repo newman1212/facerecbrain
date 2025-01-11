@@ -5,7 +5,7 @@ const Navigation = ({ onRouteChange, isSignedIn }) => {
     <nav className="flex justify-between items-center mt-4 px-4">
       {/* Logo Text */}
       <div className="text-2xl font-bold text-[#FF4B4B] bg-[#FFFFFF] px-2 rounded">
-        Face<span className="text-[#000000] -500">Detectify</span>
+        Face<span className="text-[#000000] -500">Finder</span>
       </div>
 
 
@@ -31,7 +31,7 @@ const Navigation = ({ onRouteChange, isSignedIn }) => {
             onClick={() => onRouteChange('register')}
             className="bg-green-500  px-4 py-1 rounded-full hover:bg-green-600 focus:outline-none transition-all ease-in-out duration-200"
           >
-            <span className="text-white text-lg font-bold font-mono"> Register</span>
+            <span className="text-white text-lg font-bold font-mono"> Sign up</span>
           </button>
         </div>
       )}

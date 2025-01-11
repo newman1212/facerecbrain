@@ -10,6 +10,7 @@ import Register from './Components/Register/Register';
 import Signin from './Components/Signin/Signin';
 import FaceRecognition from './Components/FaceRecognition/FaceRecognition';
 import VantaBackground from './Components/Vanta/vanta';
+import TypingEffect from './Components/TypingEffect/TypingEffect';
 import './App.css';
 // import Boundbox from './Components/FaceRecognition/Boundbox';
 
@@ -394,16 +395,30 @@ enterOption = (event) => {
                   </div>
             </div>
           ) : (
-            route === 'signin' ? (
-              <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} 
-                      handleSuccess={this.handleSuccess}
-                      handleError={this.handleError}
-              />
+            route === 'signin' ||route === 'signout' ? (
+              <div>
+                 {route==='signin' &&
+                 <div><TypingEffect
+                  text=" Welcome! Sign in to experience the magic of face detection AI..." speed={100}
+                 textStyle="text-white text-xl font-semibold" />
+                 <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} 
+                 handleSuccess={this.handleSuccess}
+                 handleError={this.handleError}
+         /></div>
+                 }
+                  {route==='signout' && <TypingEffect text=" Goodbye...Come Back Soon!" speed={100}
+              textStyle="text-white text-xl font-semibold"/>}
+                 
+             
+              </div>
             ) : (
+              <div>
+             
               <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}
                   handleSuccess={this.handleSuccess}
                   handleError={this.handleError}
               />
+              </div>
             )
           )}
         </div>

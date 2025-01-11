@@ -1,12 +1,16 @@
 import React from 'react';
 import Spinner from 'react-spinner-material';
+import TypingEffect from '../TypingEffect/TypingEffect';
 
 const ImageLinkForm = ({ imageSubmitControl, FileName, enterOption, progress,loading, handleFileChange }) => {
   return (
     <div className="text-center">
-      <p className="text-lg font-bold text-blue-400 mb-4">
+      {/* <p className="text-lg font-bold text-blue-400 mb-4">
         This magic algorithm will detect faces in your pictures. Give it a try
-      </p>
+      </p> */}
+      <TypingEffect 
+      text=" This magic algorithm will detect faces in your pictures. Give it a try" speed={100} 
+      textStyle ="text-lg font-bold text-blue-400 mb-4" />
       <div className="flex justify-center">
         <div
           className="bg-gray-900 shadow-md rounded-lg p-4 flex space-x-2 w-full max-w-md"

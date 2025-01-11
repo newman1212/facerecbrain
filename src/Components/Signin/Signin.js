@@ -27,9 +27,20 @@ class Signin extends React.Component {
     }));
   };
 
-  onSubmitSignInControl=()=>{
-    if(!this.state.signInEmail || !this.state.signInPassword){this.props.handleError('Please complete form')}
+  onSubmitSignInControl=(e)=>{
+
+    e.preventDefault(); // Prevent the form from reloading the page or appending a query string
+  if (e.target.checkValidity()) {
+    if(!this.state.signInEmail || !this.state.signInPassword)
+      {this.props.handleError('Please complete form')}
     else{this.onSubmitSignIn()};
+ 
+  } else {
+    e.target.reportValidity(); // Trigger validation errors
+  }
+
+
+  
   }
 
   onSubmitSignIn = () => {
@@ -78,11 +89,13 @@ class Signin extends React.Component {
 
     return (
       <>
-        <article className="rounded-lg border border-gray-700 shadow-lg p-8 w-full max-w-md mx-auto mt-10 bg-gray-900/50">
+        <form onSubmit={this.onSubmitSignInControl} 
+        className="rounded-lg border border-gray-700 shadow-lg 
+        p-8 w-full max-w-md mx-auto mt-10 bg-gray-900/50">
           <main className="text-gray-200" onKeyDown={this.enterOption}>
             <div>
               <fieldset className="mb-4">
-                <legend className="text-2xl font-semibold text-blue-400 mb-4">Sign In</legend>
+                {/* <legend className="text-2xl font-semibold text-blue-400 mb-4">Sign In</legend> */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium mb-1" htmlFor="email-address">
                     Email
@@ -90,6 +103,7 @@ class Signin extends React.Component {
                   <input
                     className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded focus:ring-blue-500 focus:border-blue-500"
                     type="email"
+                    required
                     name="email-address"
                     id="email-address"
                     onChange={this.onEmailChange}
@@ -118,8 +132,10 @@ class Signin extends React.Component {
               </fieldset>
               <div>
                 <button
-                  onClick={this.onSubmitSignInControl}
-                  className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                  type = 'submit'
+                  className="w-full bg-blue-500
+                   text-white py-2 px-4 rounded hover:bg-blue-600 focus:ring-2
+                    focus:ring-blue-400 focus:outline-none"
                 >
                  <span className="text-white text-lg font-bold font-mono"> Sign In</span>
                 </button>
@@ -132,12 +148,12 @@ class Signin extends React.Component {
                   onClick={() => onRouteChange('register')}
                   className="text-blue-400 hover:underline cursor-pointer"
                 >
-                  Don't have an account yet? Register
+                  Don't have an account yet? Sign up
                 </p>
               </div>
             </div>
           </main>
-        </article>
+        </form>
       </>
     );
   }

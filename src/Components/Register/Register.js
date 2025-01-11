@@ -30,10 +30,26 @@ class Register extends React.Component {
     this.setState((prevState) => ({ showPassword: !prevState.showPassword }));
   };
 
-  onSubmitRegisterControl =()=>{
-    const {name,email,password}=this.state;
+  onSubmitRegisterControl =(e)=>{
+
+    e.preventDefault(); // Prevent default submission behavior
+
+    const form = e.target; // Access the form element
+
+    if (!form.checkValidity()) {
+      // Manually trigger the validation message
+      form.reportValidity();
+    } else {
+
+      const {name,email,password}=this.state;
       if(!name || !email || !password){this.props.handleError('please complete form')}
       else{this.onSubmitRegister()};
+      // Only runs if the form is valid
+      // console.log('Form submitted successfully with email:', email);
+      // alert(`Email submitted: ${email}`);
+    }
+
+   
 
   }
 
@@ -80,11 +96,13 @@ class Register extends React.Component {
     const { visible, password, showPassword } = this.state;
 
     return (
-      <article className="rounded-lg border border-gray-700 shadow-lg p-8 w-full max-w-md mx-auto mt-10 bg-gray-900/50">
+      <form  onSubmit={this.onSubmitRegisterControl} method='POST'
+      className="rounded-lg border border-gray-700 shadow-lg p-8 
+      w-full max-w-md mx-auto mt-10 bg-gray-900/50">
         <main className="text-gray-200" onKeyDown={this.enterOption}>
           <div>
             <fieldset className="mb-4">
-              <legend className="text-2xl font-semibold text-blue-400 mb-4">Register</legend>
+              {/* <legend className="text-2xl font-semibold text-blue-400 mb-4">Register</legend> */}
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-1" htmlFor="name">
                   Name
@@ -104,8 +122,9 @@ class Register extends React.Component {
                 <input
                   className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded focus:ring-blue-500 focus:border-blue-500"
                   type="email"
-                  name="email-address"
-                  id="email-address"
+                  required
+                  name="email"
+                  id="email"
                   onChange={this.onEmailChange}
                 />
               </div>
@@ -132,10 +151,11 @@ class Register extends React.Component {
             </fieldset>
             <div>
               <button
-                onClick={this.onSubmitRegisterControl}
+              type='submit'
+                // onClick={this.onSubmitRegisterControl}
                 className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none"
               >
-                <span className="text-white text-lg font-bold font-mono"> Register</span>
+                <span className="text-white text-lg font-bold font-mono">Sign up</span>
               </button>
               <div className="flex justify-center mt-4">
                 <Spinner radius={30} color="white" stroke={5} visible={visible} />
@@ -151,7 +171,7 @@ class Register extends React.Component {
             </div>
           </div>
         </main>
-      </article>
+      </form>
     );
   }
 }
