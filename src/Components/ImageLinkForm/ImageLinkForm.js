@@ -1,11 +1,10 @@
 import React from 'react';
 import Spinner from 'react-spinner-material';
 import TypingEffect from '../TypingEffect/TypingEffect';
-import FaceRecognition from '../FaceRecognition/FaceRecognition';
+
 
 const ImageLinkForm = ({ imageSubmitControl, FileName, 
-  enterOption, progress,loading, handleFileChange ,  box,
-  uploadedImageUrl
+  enterOption, progress,loading, handleFileChange 
 }) => {
   return (
     <div className="text-center">
@@ -57,7 +56,7 @@ const ImageLinkForm = ({ imageSubmitControl, FileName,
   </div>
 </div>
 
-      <FaceRecognition box={box} uploadedImageUrl={uploadedImageUrl}/>
+      
 
     </div>
   );

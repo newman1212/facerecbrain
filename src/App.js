@@ -8,7 +8,7 @@ import ImageLinkForm from './Components/ImageLinkForm/ImageLinkForm';
 import Rank from './Components/Rank/Rank';
 import Register from './Components/Register/Register';
 import Signin from './Components/Signin/Signin';
-// import FaceRecognition from './Components/FaceRecognition/FaceRecognition';
+import FaceRecognition from './Components/FaceRecognition/FaceRecognition';
 import VantaBackground from './Components/Vanta/vanta';
 import TypingEffect from './Components/TypingEffect/TypingEffect';
 import './App.css';
@@ -373,10 +373,9 @@ enterOption = (event) => {
         {/* Foreground Content */}
         <div className="content">
           <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
-          <div className="w-full max-w-md mx-auto p-4 text-center">
-  <ToastContainer />
-</div>
-
+          <div className="w-full max-w-lg mx-auto p-4 text-center">
+          <ToastContainer />
+          </div>
           {route === 'home' ? (
             <div>
               
@@ -384,7 +383,7 @@ enterOption = (event) => {
                 name={this.state.user.name}
                 entries={this.state.user.entries}
               />
-              <div ref={this.sectionRef}>
+                  <div ref={this.sectionRef}>
                   <ImageLinkForm
                     handleFileChange ={this.handleFileChange}
                     imageSubmitControl={this.imageSubmitControl}
@@ -394,10 +393,9 @@ enterOption = (event) => {
                     enterOption={this.enterOption}
                     // visible={visible}
                     FileName = {FileName}
-                    box={box} imageUrl={imageUrl} 
-                    uploadedImageUrl={uploadedImageUrl} fileUrl={fileUrl}
                   />
-                  
+                  <FaceRecognition box={box} imageUrl={imageUrl} 
+                  uploadedImageUrl={uploadedImageUrl} fileUrl={fileUrl} />
                   </div>
             </div>
           ) : (
