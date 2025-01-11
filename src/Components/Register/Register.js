@@ -32,7 +32,11 @@ class Register extends React.Component {
 
   onSubmitRegisterControl =(e)=>{
 
-    e.preventDefault(); // Prevent default submission behavior
+   
+    // const {name,email,password}=this.state;
+    //   if(!name || !email || !password){this.props.handleError('please complete form')};
+
+      e.preventDefault(); // Prevent default submission behavior
 
     const form = e.target; // Access the form element
 
@@ -40,10 +44,7 @@ class Register extends React.Component {
       // Manually trigger the validation message
       form.reportValidity();
     } else {
-
-      const {name,email,password}=this.state;
-      if(!name || !email || !password){this.props.handleError('please complete form')}
-      else{this.onSubmitRegister()};
+        this.onSubmitRegister();
       // Only runs if the form is valid
       // console.log('Form submitted successfully with email:', email);
       // alert(`Email submitted: ${email}`);
@@ -112,6 +113,7 @@ class Register extends React.Component {
                   type="text"
                   name="name"
                   id="name"
+                  required
                   onChange={this.onNameChange}
                 />
               </div>
@@ -137,6 +139,7 @@ class Register extends React.Component {
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   id="password"
+                  required
                   onChange={this.onPasswordChange}
                 />
                 {password && (

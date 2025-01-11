@@ -31,9 +31,9 @@ class Signin extends React.Component {
 
     e.preventDefault(); // Prevent the form from reloading the page or appending a query string
   if (e.target.checkValidity()) {
-    if(!this.state.signInEmail || !this.state.signInPassword)
-      {this.props.handleError('Please complete form')}
-    else{this.onSubmitSignIn()};
+    // if(!this.state.signInEmail || !this.state.signInPassword)
+    //   {this.props.handleError('Please complete form')}
+      this.onSubmitSignIn()
  
   } else {
     e.target.reportValidity(); // Trigger validation errors
@@ -118,6 +118,7 @@ class Signin extends React.Component {
                     type={showPassword ? 'text' : 'password'}
                     name="password"
                     id="password"
+                    required
                     onChange={this.onPasswordChange}
                   />
                   {signInPassword && (
