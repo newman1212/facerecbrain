@@ -31,7 +31,7 @@ class TypingEffect extends Component {
 
   render() {
     return (
-      <div>
+      <div className="w-full max-w-lg mx-auto p-4 text-center">
         <p className={this.props.textStyle}>
           {this.state.displayedText}
         </p>

@@ -1,28 +1,24 @@
 import React from 'react';
 import Boundbox from './Boundbox';
 
-const FaceRecognition = ({ imageUrl, box, fileUrl, uploadedImageUrl}) => {
+const FaceRecognition = ({ box, uploadedImageUrl}) => {
   return (
-    <div className='center ma'>
+    <div className="flex justify-center w-full max-w-4xl mx-auto pt-1 p-4 relative">
 
-      <div className='absolute mt2'>
-        <img id='inputimage' alt='' src={uploadedImageUrl} width='500' height='auto'/>
-      
-      {
-      box.map((face,i) => {
-      return <Boundbox 
-      key ={box[i].topRow} 
-      boxTop={box[i].topRow} 
-      boxDown={box[i].bottomRow} 
-      boxLeft={box[i].leftCol}
-      boxRight={box[i].rightCol}/>
-    })
-
-      }
-
-      </div>
-
+    <div className="relative mt-4">
+      <img id="inputimage" alt="" src={uploadedImageUrl} className="w-full max-w-lg h-auto" />
+      {box.map((face, i) => (
+        <Boundbox
+          key={i} // Ensuring unique keys for each box
+          boxTop={face.topRow}
+          boxDown={face.bottomRow}
+          boxLeft={face.leftCol}
+          boxRight={face.rightCol}
+        />
+      ))}
     </div>
+  </div>
+  
   );
 }
 

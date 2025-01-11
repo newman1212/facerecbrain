@@ -8,7 +8,7 @@ import ImageLinkForm from './Components/ImageLinkForm/ImageLinkForm';
 import Rank from './Components/Rank/Rank';
 import Register from './Components/Register/Register';
 import Signin from './Components/Signin/Signin';
-import FaceRecognition from './Components/FaceRecognition/FaceRecognition';
+// import FaceRecognition from './Components/FaceRecognition/FaceRecognition';
 import VantaBackground from './Components/Vanta/vanta';
 import TypingEffect from './Components/TypingEffect/TypingEffect';
 import './App.css';
@@ -36,7 +36,8 @@ const initialState = {
   apiResponse: null,
   FileName : 'Click To Upload Image',
   loading: false,
-  progress: 0
+  progress: 0,
+  percentage: "",
 
 };
 
@@ -59,6 +60,7 @@ class App extends Component {
   handleFileChange = (event) => {
     this.setState({box:[]});
     this.setState({faceCount:0});
+    this.setState({percentage:""})
     this.setState({ file: event.target.files[0] },
       ()=>{
         this.setState({ FileName: this.state.file.name });
@@ -76,7 +78,7 @@ class App extends Component {
     const progressInterval = setInterval(() => {
       this.setState((prevState) => ({
         progress: prevState.progress < 99 ? prevState.progress + 1 : prevState.progress,
-      }));
+      }),()=>this.setState({percentage:`${this.state.progress}%`}));
     }, 180); // Adjust interval time for smoother progress
   
     try {
@@ -84,7 +86,7 @@ class App extends Component {
       // await this.onButtonSubmit(this.state.uploadedImageUrl); // Trigger face detection
   
       clearInterval(progressInterval); // Stop progress increment on completion
-      this.setState({ progress: 'Done' }); // Set to 100% on completion
+      this.setState({ percentage: 'Done' }); // Set to 100% on completion
     } catch (error) {
       console.error("Error detecting faces:", error);
       clearInterval(progressInterval); // Ensure interval is cleared on error
@@ -360,7 +362,7 @@ enterOption = (event) => {
 
   render() {
     const { isSignedIn, imageUrl, route, box, fileUrl,
-      uploadedImageUrl,FileName,loading,progress } = this.state;
+      uploadedImageUrl,FileName,loading,percentage } = this.state;
     return (
       <div className="App">
         {/* Vanta Background */}
@@ -371,7 +373,10 @@ enterOption = (event) => {
         {/* Foreground Content */}
         <div className="content">
           <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
-          <ToastContainer />
+          <div className="w-full max-w-md mx-auto p-4 text-center">
+  <ToastContainer />
+</div>
+
           {route === 'home' ? (
             <div>
               
@@ -379,26 +384,28 @@ enterOption = (event) => {
                 name={this.state.user.name}
                 entries={this.state.user.entries}
               />
-                  <div ref={this.sectionRef}>
+              <div ref={this.sectionRef}>
                   <ImageLinkForm
                     handleFileChange ={this.handleFileChange}
                     imageSubmitControl={this.imageSubmitControl}
-                    progress={progress}
+                    progress={percentage}
                     loading={loading}
             
                     enterOption={this.enterOption}
                     // visible={visible}
                     FileName = {FileName}
+                    box={box} imageUrl={imageUrl} 
+                    uploadedImageUrl={uploadedImageUrl} fileUrl={fileUrl}
                   />
-                  <FaceRecognition box={box} imageUrl={imageUrl} 
-                  uploadedImageUrl={uploadedImageUrl} fileUrl={fileUrl} />
+                  
                   </div>
             </div>
           ) : (
             route === 'signin' ||route === 'signout' ? (
               <div>
                  {route==='signin' &&
-                 <div><TypingEffect
+                 <div>
+                  <TypingEffect
                   text=" Welcome! Sign in to experience the magic of face detection AI..." speed={100}
                  textStyle="text-white text-xl font-semibold" />
                  <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} 
