@@ -383,7 +383,7 @@ enterOption = (event) => {
                 name={this.state.user.name}
                 entries={this.state.user.entries}
               />
-                  <div ref={this.sectionRef}>
+                 
                   <ImageLinkForm
                     handleFileChange ={this.handleFileChange}
                     imageSubmitControl={this.imageSubmitControl}
@@ -394,6 +394,7 @@ enterOption = (event) => {
                     // visible={visible}
                     FileName = {FileName}
                   />
+                   <div ref={this.sectionRef}>
                   <FaceRecognition box={box} imageUrl={imageUrl} 
                   uploadedImageUrl={uploadedImageUrl} fileUrl={fileUrl} />
                   </div>
