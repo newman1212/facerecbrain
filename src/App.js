@@ -122,6 +122,19 @@ class App extends Component {
     );
   };
 
+  handleSignUpSuccess = (message) => {
+    console.log('alert triggered');
+    toast.success(
+      <div>
+        <strong className="block text-lg">{message}</strong>
+      </div>,
+       {
+        position: "top-right",
+        autoClose: 15000,
+      }
+    );
+  };
+
 
   handleError = (message) => {
     console.log('alert triggered');
@@ -421,7 +434,7 @@ enterOption = (event) => {
               <div>
              
               <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}
-                  handleSuccess={this.handleSuccess}
+                  handleSignUpSuccess={this.handleSignUpSuccess}
                   handleError={this.handleError}
               />
               </div>

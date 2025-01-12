@@ -64,7 +64,7 @@ class Signin extends React.Component {
           this.props.loadUser(user);
           console.log(user,'USER INFO')
           this.props.onRouteChange('home');
-          this.props.handleSuccess('Welcome Back...')
+          this.props.handleSuccess('Welcome Back!')
           this.setState({ visible: false });
         } else {
           this.props.handleError('Wrong email or password')

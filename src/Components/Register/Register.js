@@ -78,7 +78,7 @@ class Register extends React.Component {
           console.log(user,'USER INFO');
           this.props.onRouteChange('home');
           this.setState({ visible: false });
-          this.props.handleSuccess('Account Created Successfully!');
+          this.props.handleSignUpSuccess(`Welcome ${user.name}!`);
         } else {
           this.props.handleError('Error creating account...pls try again later');
           this.setState({ visible: false });
