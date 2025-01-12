@@ -79,7 +79,7 @@ class App extends Component {
       this.setState((prevState) => ({
         progress: prevState.progress < 99 ? prevState.progress + 1 : prevState.progress,
       }),()=>this.setState({percentage:`${this.state.progress}%`}));
-    }, 180); // Adjust interval time for smoother progress
+    }, 150); // Adjust interval time for smoother progress
   
     try {
       await this.handleFileUpload(); // Trigger the file upload

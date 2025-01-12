@@ -153,16 +153,27 @@ class Register extends React.Component {
               </div>
             </fieldset>
             <div>
-              <button
+
+
+
+
+
+             
+            <button  className="w-full bg-blue-500 text-white py-2 px-4 
+                rounded hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none"
               type='submit'
-                // onClick={this.onSubmitRegisterControl}
-                className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-              >
-                <span className="text-white text-lg font-bold font-mono">Sign up</span>
-              </button>
-              <div className="flex justify-center mt-4">
-                <Spinner radius={30} color="white" stroke={5} visible={visible} />
-              </div>
+    >
+      {visible ? (
+        <div className="flex items-center justify-center space-x-2">
+          <Spinner radius={20} color="white" stroke={3} visible={true} />
+          <span className="text-white text-sm font-semibold font-mono">Creating account...</span>
+          
+        </div>
+      ) : (
+        <span className="text-white text-lg font-bold font-mono">Sign Up</span>
+      )}
+    </button>
+
             </div>
             <div className="mt-4 text-center">
               <p

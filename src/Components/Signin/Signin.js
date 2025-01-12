@@ -132,18 +132,24 @@ class Signin extends React.Component {
                 </div>
               </fieldset>
               <div>
-                <button
-                  type = 'submit'
-                  className="w-full bg-blue-500
-                   text-white py-2 px-4 rounded hover:bg-blue-600 focus:ring-2
-                    focus:ring-blue-400 focus:outline-none"
-                >
-                 <span className="text-white text-lg font-bold font-mono"> Sign In</span>
-                </button>
+
+              <button  className="w-full bg-blue-500 text-white py-2 px-4 
+                rounded hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              type='submit'
+    >
+      {visible ? (
+        <div className="flex items-center justify-center space-x-2">
+          <Spinner radius={20} color="white" stroke={3} visible={true} />
+          <span className="text-white text-sm font-semibold font-mono">Signing in...</span>
+          
+        </div>
+      ) : (
+        <span className="text-white text-lg font-bold font-mono">Sign in</span>
+      )}
+    </button>
+
               </div>
-              <div className="flex justify-center mt-4">
-                <Spinner radius={30} color="white" stroke={5} visible={visible} />
-              </div>
+
               <div className="mt-4 text-center">
                 <p
                   onClick={() => onRouteChange('register')}
