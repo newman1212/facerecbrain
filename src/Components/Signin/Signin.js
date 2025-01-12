@@ -144,7 +144,7 @@ class Signin extends React.Component {
           
         </div>
       ) : (
-        <span className="text-white text-lg font-bold font-mono">Sign in</span>
+        <span className="text-white text-lg font-bold font-mono">Sign In</span>
       )}
     </button>
 
